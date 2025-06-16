@@ -1,0 +1,100 @@
+.focus-container {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+  line-height: 1.2;
+}
+
+.focus-word {
+  display: inline-block;
+  margin-right: 0.5em;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  cursor: default;
+  transition: filter 0.5s ease;
+}
+
+.focus-word.manual {
+  cursor: pointer;
+}
+
+.focus-word:last-child {
+  margin-right: 0;
+}
+
+.focus-frame {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid var(--border-color, #00ff00);
+  border-radius: 8px;
+  box-shadow: 
+    0 0 10px var(--glow-color, rgba(0, 255, 0, 0.6)),
+    inset 0 0 10px var(--glow-color, rgba(0, 255, 0, 0.3));
+  background: var(--glow-color, rgba(0, 255, 0, 0.1));
+  backdrop-filter: blur(2px);
+}
+
+.corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border-color, #00ff00);
+  background: var(--border-color, #00ff00);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--glow-color, rgba(0, 255, 0, 0.8));
+}
+
+.corner.top-left {
+  top: -6px;
+  left: -6px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner.top-right {
+  top: -6px;
+  right: -6px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner.bottom-left {
+  bottom: -6px;
+  left: -6px;
+  border-right: none;
+  border-top: none;
+}
+
+.corner.bottom-right {
+  bottom: -6px;
+  right: -6px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Tema varyasyonları */
+.focus-container.blue-theme {
+  --border-color: #3b82f6;
+  --glow-color: rgba(59, 130, 246, 0.6);
+}
+
+.focus-container.purple-theme {
+  --border-color: #8b5cf6;
+  --glow-color: rgba(139, 92, 246, 0.6);
+}
+
+.focus-container.gold-theme {
+  --border-color: #f59e0b;
+  --glow-color: rgba(245, 158, 11, 0.6);
+}
+
+.focus-container.red-theme {
+  --border-color: #ef4444;
+  --glow-color: rgba(239, 68, 68, 0.6);
+}
+
+.focus-container.green-theme {
+  --border-color: #10b981;
+  --glow-color: rgba(16, 185, 129, 0.6);
+} 

@@ -1,0 +1,91 @@
+.shiny-text {
+  background: linear-gradient(
+    110deg,
+    #e2e8f0 45%,
+    #ffffff 55%,
+    #e2e8f0 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine infinite linear;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.shiny-text.disabled {
+  animation: none;
+  background: #e2e8f0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes shine {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Dark mode için özel renk teması */
+.dark .shiny-text,
+.shiny-text.dark-theme {
+  background: linear-gradient(
+    110deg,
+    #cbd5e1 45%,
+    #ffffff 55%,
+    #cbd5e1 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Mavi tema için */
+.shiny-text.blue-theme {
+  background: linear-gradient(
+    110deg,
+    #3b82f6 45%,
+    #60a5fa 55%,
+    #3b82f6 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Mor tema için */
+.shiny-text.purple-theme {
+  background: linear-gradient(
+    110deg,
+    #8b5cf6 45%,
+    #a78bfa 55%,
+    #8b5cf6 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Altın tema için */
+.shiny-text.gold-theme {
+  background: linear-gradient(
+    110deg,
+    #f59e0b 45%,
+    #fbbf24 55%,
+    #f59e0b 65%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+} 
+ 
+ 
