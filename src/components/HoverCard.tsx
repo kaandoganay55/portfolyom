@@ -14,20 +14,10 @@ interface HoverCardProps {
 const HoverCard = memo(function HoverCard({
   children,
   className = '',
-  glowColor = 'blue',
   borderGradient = false,
   hoverEffect = 'lift'
 }: HoverCardProps) {
   const baseClasses = "relative rounded-2xl bg-black/40 backdrop-blur-sm border border-white/10 transition-all duration-300 gpu-accelerated cursor-pointer";
-  
-  const glowColors = {
-    blue: 'shadow-blue-500/25',
-    purple: 'shadow-purple-500/25',
-    pink: 'shadow-pink-500/25',
-    yellow: 'shadow-yellow-500/25',
-    green: 'shadow-green-500/25',
-    cyan: 'shadow-cyan-500/25'
-  };
 
   const hoverVariants = {
     lift: {

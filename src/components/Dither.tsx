@@ -1,6 +1,5 @@
 'use client';
 
-/* eslint-disable react/no-unknown-property */
 import { useRef, useState, useEffect, forwardRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, wrapEffect } from "@react-three/postprocessing";
@@ -227,7 +226,7 @@ function DitheredWaves({
     }
   });
 
-  const handlePointerMove = (e: any) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!enableMouseInteraction) return;
     const rect = gl.domElement.getBoundingClientRect();
     const dpr = gl.getPixelRatio();

@@ -269,15 +269,30 @@ export default function PixelCard({
     animationRef.current = requestAnimationFrame(() => doAnimate(name));
   };
 
-  const onMouseEnter = () => !disablePixels && handleAnimation("appear");
-  const onMouseLeave = () => !disablePixels && handleAnimation("disappear");
+  const onMouseEnter = () => {
+    if (!disablePixels) {
+      handleAnimation("appear");
+    }
+  };
+  
+  const onMouseLeave = () => {
+    if (!disablePixels) {
+      handleAnimation("disappear");
+    }
+  };
+  
   const onFocus = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
-    !disablePixels && handleAnimation("appear");
+    if (!disablePixels) {
+      handleAnimation("appear");
+    }
   };
+  
   const onBlur = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
-    !disablePixels && handleAnimation("disappear");
+    if (!disablePixels) {
+      handleAnimation("disappear");
+    }
   };
 
   useEffect(() => {

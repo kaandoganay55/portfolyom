@@ -92,7 +92,7 @@ const TrueFocus = ({
               "--border-color": borderColor,
               "--glow-color": glowColor,
               transition: `filter ${animationDuration}s ease`,
-            } as React.CSSProperties & { [key: string]: any }}
+            } as React.CSSProperties}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
           >
@@ -116,7 +116,7 @@ const TrueFocus = ({
         style={{
           "--border-color": borderColor,
           "--glow-color": glowColor,
-        } as React.CSSProperties & { [key: string]: any }}
+        } as React.CSSProperties}
       >
         <span className="corner top-left"></span>
         <span className="corner top-right"></span>

@@ -43,23 +43,6 @@ const itemVariants = {
 
 // Page Components
 const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
-  const [scrollY, setScrollY] = useState(0);
-
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          setScrollY(window.scrollY);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
     <motion.div 
       className="min-h-screen"
@@ -189,7 +172,7 @@ const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
                 color: 'pink',
                 hoverEffect: 'tilt' as const
               }
-            ].map((service, index) => (
+            ].map((service) => (
               <motion.div
                 key={service.title}
                 variants={{
@@ -223,8 +206,6 @@ const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
           </AnimatedSection>
         </div>
       </AnimatedSection>
-
-
 
       {/* Call to Action Section */}
       <motion.section 
@@ -438,7 +419,7 @@ const SkillsPage = () => (
             whileTap={{ scale: 0.95 }}
           >
                           <PixelCard 
-                variant={skill.variant as any}
+                variant={skill.variant as 'blue' | 'yellow' | 'pink' | 'default'}
                 className="h-16 sm:h-18 md:h-20 hover-effect touch-target cursor-pointer shadow-xl shadow-black/30 hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
                 disablePixels={true}
               >
@@ -506,7 +487,7 @@ const ProjectsPage = () => (
             transition={{ duration: 0.6, delay: index * 0.2 }}
             whileHover={{ y: -10, scale: 1.02 }}
           >
-            <PixelCard variant={project.variant as any} className="h-80 sm:h-88 md:h-96 hover-effect cursor-pointer shadow-2xl shadow-black/40 hover:shadow-4xl hover:shadow-purple-500/20 transition-all duration-500 premium-card" disablePixels={true}>
+            <PixelCard variant={project.variant as 'blue' | 'yellow' | 'pink' | 'default'} className="h-80 sm:h-88 md:h-96 hover-effect cursor-pointer shadow-2xl shadow-black/40 hover:shadow-4xl hover:shadow-purple-500/20 transition-all duration-500 premium-card" disablePixels={true}>
               <div className="w-full h-full p-4 sm:p-6 flex flex-col">
                 <motion.div 
                   className="h-32 sm:h-40 md:h-48 bg-gradient-to-br from-white/5 to-white/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 backdrop-blur-sm"
