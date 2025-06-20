@@ -8,232 +8,280 @@ import PixelCard from '@/components/PixelCard';
 import LiquidChrome from '@/components/LiquidChrome';
 import GooeyNav from '@/components/GooeyNav';
 import Waves from '@/components/Waves';
+import AnimatedButton from '@/components/AnimatedButton';
+import AnimatedSection from '@/components/AnimatedSection';
+import HoverCard from '@/components/HoverCard';
+
 
 // Dynamically import Dither component to avoid SSR issues with Three.js
 const Dither = dynamic(() => import('@/components/Dither'), { ssr: false });
+
+// Enhanced animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.3,
+      staggerChildren: 0.2
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { y: 60, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 12
+    }
+  }
+};
 
 // Page Components
 const HomePage = ({ onNavigate }: { onNavigate: (page: string) => void }) => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="min-h-screen">
+    <motion.div 
+      className="min-h-screen"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Hero Section */}
-      <section className="h-screen flex items-center justify-center px-6 md:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-pink-900/20"></div>
+        
+        <motion.div 
+          className="container max-w-6xl mx-auto text-center relative z-10"
+          variants={itemVariants}
+        >
           <motion.h1 
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight"
+            variants={itemVariants}
           >
-            <div className="mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-              Merhaba Ben [İsminiz]
-            </div>
+            <motion.div 
+              className="mb-2 sm:mb-4 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              Kaan Doğanay
+            </motion.div>
           </motion.h1>
-          <motion.p 
-            className="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <ShinyText text="Full Stack Developer & UI/UX Tasarımcı" speed={5} className="gold-theme" />
-          </motion.p>
-          <motion.p 
-            className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Modern web teknolojileri ile kullanıcı dostu ve performanslı uygulamalar geliştiriyorum.
-            React, Next.js, TypeScript ve diğer modern teknolojiler ile projeler üretiyorum.
-          </motion.p>
+          
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-6 sm:mb-8 max-w-3xl mx-auto px-4"
+            variants={itemVariants}
           >
-            <button 
+            <ShinyText text="Bilgisayar Mühendisi & Full Stack Developer" speed={5} className="gold-theme" />
+          </motion.div>
+          
+          <motion.p 
+            className="text-sm sm:text-base md:text-lg text-gray-400 mb-8 sm:mb-12 max-w-4xl mx-auto leading-relaxed px-4"
+            variants={itemVariants}
+          >
+            Balıkesir Üniversitesi Bilgisayar Mühendisliği mezunu. React, Next.js, MongoDB, Firebase 
+            ve Python ile modern web uygulamaları geliştiriyorum. Yapay zeka öğrenmesi alanında kendimi 
+            geliştirmeye devam ediyorum.
+          </motion.p>
+          
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center px-4"
+            variants={itemVariants}
+          >
+            <AnimatedButton 
               onClick={() => onNavigate('projects')}
-              className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
+              variant="primary"
+              size="lg"
             >
               <ShinyText text="Projelerimi Görün" speed={3} className="dark-theme" />
-            </button>
-            <button 
+            </AnimatedButton>
+            
+            <AnimatedButton 
               onClick={() => onNavigate('contact')}
-              className="border border-yellow-400/50 hover:border-yellow-400/80 text-yellow-300 hover:text-yellow-200 font-semibold py-3 px-8 rounded-full transition-all duration-300 hover:bg-yellow-400/10 cursor-pointer hover:shadow-lg shadow-yellow-400/20"
+              variant="outline"
+              size="lg"
             >
               <ShinyText text="İletişime Geçin" speed={4} className="gold-theme" />
-            </button>
+            </AnimatedButton>
           </motion.div>
-        </div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2, duration: 0.8 }}
+        >
+          <motion.div
+            className="w-6 h-10 border-2 border-white/30 rounded-full p-1"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <motion.div
+              className="w-1 h-3 bg-white rounded-full mx-auto"
+              animate={{ y: [0, 16, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* What I Do Section */}
-      <motion.section 
-        className="py-20 px-6 md:px-8"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
+      <AnimatedSection 
+        className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8"
+        direction="up"
+        delay={0.2}
       >
-        <div className="max-w-6xl mx-auto">
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-white mb-12 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+        <div className="container max-w-6xl mx-auto">
+          <AnimatedSection 
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-12 text-center"
+            direction="scale"
+            delay={0.1}
           >
-            <ShinyText text="Neler Yapıyorum?" speed={4} className="blue-theme" />
-          </motion.h2>
-          <div className="grid md:grid-cols-3 gap-8">
-                         {[
-               {
-                 icon: '🎨',
-                 title: 'UI/UX Tasarım',
-                 description: 'Kullanıcı dostu ve etkileyici arayüzler tasarlıyorum',
-                 color: 'pink'
-               },
-               {
-                 icon: '⚡',
-                 title: 'Frontend Geliştirme',
-                 description: 'Modern JavaScript framework\'leri ile hızlı web uygulamaları',
-                 color: 'yellow'
-               },
-               {
-                 icon: '🚀',
-                 title: 'Full Stack Çözümler',
-                 description: 'Baştan sona tüm teknik süreçleri yönetebiliyorum',
-                 color: 'default'
-               }
-             ].map((service, index) => (
+            <ShinyText text="Uzmanlık Alanlarım" speed={4} className="blue-theme" />
+          </AnimatedSection>
+          
+          <AnimatedSection 
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8"
+            stagger={true}
+          >
+            {[
+              {
+                icon: '⚛️',
+                title: 'Frontend Development',
+                description: 'React, Next.js ve modern JavaScript teknolojileri ile responsive web uygulamaları',
+                color: 'blue',
+                hoverEffect: 'lift' as const
+              },
+              {
+                icon: '🔧',
+                title: 'Backend Development',
+                description: 'Node.js, Express.js ve MongoDB ile güçlü backend sistemleri',
+                color: 'yellow',
+                hoverEffect: 'glow' as const
+              },
+              {
+                icon: '🤖',
+                title: 'Yapay Zeka',
+                description: 'Python kullanarak makine öğrenmesi ve AI projeleri geliştiriyorum',
+                color: 'pink',
+                hoverEffect: 'tilt' as const
+              }
+            ].map((service, index) => (
               <motion.div
                 key={service.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                viewport={{ once: true }}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0 }
+                }}
               >
-                <PixelCard variant={service.color as any} className="h-64">
-                  <div className="absolute inset-0 p-6 flex flex-col items-center text-center">
-                    <div className="text-4xl mb-4">{service.icon}</div>
-                    <h3 className="text-xl font-semibold text-white mb-4">
+                <HoverCard 
+                  className="h-48 sm:h-56 md:h-64 p-4 sm:p-6 shadow-2xl shadow-black/40 hover:shadow-3xl hover:shadow-purple-500/20 transition-all duration-500"
+                  hoverEffect={service.hoverEffect}
+                  borderGradient={true}
+                >
+                  <div className="w-full h-full flex flex-col items-center text-center">
+                    <motion.div 
+                      className="text-3xl sm:text-4xl mb-3 sm:mb-4"
+                      whileHover={{ scale: 1.2, rotate: 10 }}
+                      transition={{ type: "spring", stiffness: 300 }}
+                    >
+                      {service.icon}
+                    </motion.div>
+                    <h3 className="text-lg sm:text-xl font-semibold text-white mb-3 sm:mb-4">
                       <ShinyText text={service.title} speed={3} className="gold-theme" />
                     </h3>
-                    <p className="text-gray-300 text-sm leading-relaxed">
+                    <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
                       {service.description}
                     </p>
                   </div>
-                </PixelCard>
+                </HoverCard>
               </motion.div>
             ))}
-          </div>
+          </AnimatedSection>
         </div>
-      </motion.section>
+      </AnimatedSection>
 
-      {/* Statistics Section */}
-      <motion.section 
-        className="py-20 px-6 md:px-8"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-white mb-12 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <ShinyText text="Rakamlarla Ben" speed={4} className="purple-theme" />
-          </motion.h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { number: '3+', label: 'Yıl Deneyim', icon: '📅' },
-              { number: '15+', label: 'Tamamlanan Proje', icon: '🎯' },
-              { number: '50+', label: 'Mutlu Müşteri', icon: '😊' },
-              { number: '24/7', label: 'Destek', icon: '🛠️' }
-            ].map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                                 <PixelCard variant={index % 2 === 0 ? 'pink' : 'yellow'} className="h-32">
-                  <div className="absolute inset-0 p-4 flex flex-col items-center justify-center text-center">
-                    <div className="text-2xl mb-2">{stat.icon}</div>
-                    <div className="text-2xl font-bold text-white mb-1">
-                      <ShinyText text={stat.number} speed={2} className="gold-theme" />
-                    </div>
-                    <div className="text-xs text-gray-300">{stat.label}</div>
-                  </div>
-                </PixelCard>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
+
 
       {/* Call to Action Section */}
       <motion.section 
-        className="py-20 px-6 md:px-8"
+        className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
       >
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="container max-w-4xl mx-auto text-center">
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-white mb-6"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <ShinyText text="Bir Proje Fikriniz Mi Var?" speed={4} className="gold-theme" />
+            <ShinyText text="İletişime Geçin" speed={3} className="pink-theme" />
           </motion.h2>
+          
           <motion.p 
-            className="text-xl text-gray-300 mb-12"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-sm sm:text-base md:text-lg text-gray-400 mb-6 sm:mb-8 leading-relaxed px-4"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            Hayal ettiğiniz dijital çözümü birlikte gerçeğe dönüştürelim!
+            Yeni projeler ve işbirlikleri için benimle iletişime geçebilirsiniz.
           </motion.p>
+          
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
             viewport={{ once: true }}
           >
-            <button 
+            <AnimatedButton 
               onClick={() => onNavigate('contact')}
-              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-semibold py-4 px-12 rounded-full transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl shadow-yellow-500/30"
+              variant="glow"
+              size="lg"
             >
-              <ShinyText text="Hemen Başlayalım!" speed={3} className="dark-theme" />
-            </button>
+              <ShinyText text="Hemen Başlayalım" speed={4} className="dark-theme" />
+            </AnimatedButton>
           </motion.div>
         </div>
       </motion.section>
-    </div>
+    </motion.div>
   );
 };
 
 const AboutPage = () => (
-  <section className="min-h-screen flex items-center justify-center px-6 md:px-8 relative">
+  <motion.section 
+    className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 relative"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
     {/* LiquidChrome Background */}
     <div className="absolute inset-0 z-0">
       <LiquidChrome
@@ -246,58 +294,95 @@ const AboutPage = () => (
     {/* Dark overlay for better text readability */}
     <div className="absolute inset-0 bg-black/60 z-10"></div>
     
-    <div className="max-w-6xl mx-auto relative z-20">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+    <div className="container max-w-6xl mx-auto relative z-20">
+      <motion.h2 
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-12 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <ShinyText text="Hakkımda" speed={4} className="purple-theme" />
-      </h2>
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h3 className="text-2xl font-semibold text-white mb-6">
-            Merhaba! 👋
-          </h3>
-          <p className="text-gray-300 mb-6 leading-relaxed">
-            Ben [İsminiz], tutkulu bir yazılım geliştiricisiyim. Web teknolojileri ile 
-            kullanıcı deneyimini ön planda tutan, modern ve performanslı uygulamalar 
-            geliştirmeyi seviyorum.
-          </p>
-          <p className="text-gray-300 mb-6 leading-relaxed">
-            Frontend geliştirmede React, Next.js, TypeScript ve modern CSS framework'leri 
-            kullanırken, backend tarafında Node.js, Python ve veritabanı teknolojileri 
-            ile çalışıyorum.
-          </p>
-        </div>
-        <PixelCard variant="blue" className="h-full">
-          <div className="absolute inset-0 p-8 flex flex-col">
-            <h4 className="text-xl font-semibold text-white mb-6">
-              <ShinyText text="Deneyim Alanlarım" speed={3} className="gold-theme" />
-            </h4>
-            <ul className="space-y-4 text-gray-300 flex-1">
-              <li className="flex items-center">
-                <span className="w-3 h-3 bg-blue-400 rounded-full mr-4 animate-pulse"></span>
-                <ShinyText text="Frontend Development" speed={4} className="blue-theme" />
-              </li>
-              <li className="flex items-center">
-                <span className="w-3 h-3 bg-purple-400 rounded-full mr-4 animate-pulse"></span>
-                <ShinyText text="Backend Development" speed={4} className="purple-theme" />
-              </li>
-              <li className="flex items-center">
-                <span className="w-3 h-3 bg-green-400 rounded-full mr-4 animate-pulse"></span>
-                <ShinyText text="UI/UX Design" speed={4} className="text-green-300" />
-              </li>
-              <li className="flex items-center">
-                <span className="w-3 h-3 bg-yellow-400 rounded-full mr-4 animate-pulse"></span>
-                <ShinyText text="Mobile Development" speed={4} className="gold-theme" />
-              </li>
-            </ul>
-          </div>
-        </PixelCard>
+      </motion.h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+                     <h3 className="text-xl sm:text-2xl font-semibold text-white mb-4 sm:mb-6">
+             Kaan Doğanay
+           </h3>
+           <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
+             Balıkesir Üniversitesi Bilgisayar Mühendisliği mezunuyum. Modern web teknolojileri 
+             ile kullanıcı deneyimini ön planda tutan uygulamalar geliştirmeye odaklanıyorum.
+           </p>
+           <p className="text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed">
+             React, Next.js, MongoDB, Firebase gibi teknolojilerle frontend ve backend geliştirme 
+             yapıyorum. Aynı zamanda Python ile yapay zeka alanında kendimi geliştirmeye devam ediyorum.
+           </p>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          whileHover={{ y: -5 }}
+        >
+                     <PixelCard variant="blue" className="h-64 sm:h-72 md:h-full hover-effect cursor-pointer shadow-2xl shadow-blue-500/20 hover:shadow-3xl hover:shadow-blue-500/30 transition-all duration-300" disablePixels={true}>
+             <div className="w-full h-full p-4 sm:p-6 md:p-8 flex flex-col">
+              <h4 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6">
+                <ShinyText text="Deneyim Alanlarım" speed={3} className="gold-theme" />
+              </h4>
+              <ul className="space-y-3 sm:space-y-4 text-gray-300 flex-1">
+                <motion.li 
+                  className="flex items-center"
+                  whileHover={{ x: 5 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <span className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-400 rounded-full mr-3 sm:mr-4 animate-pulse"></span>
+                                     <ShinyText text="React & Next.js" speed={4} className="blue-theme" />
+                 </motion.li>
+                 <motion.li 
+                   className="flex items-center"
+                   whileHover={{ x: 5 }}
+                   transition={{ type: "spring", stiffness: 300 }}
+                 >
+                   <span className="w-2 h-2 sm:w-3 sm:h-3 bg-purple-400 rounded-full mr-3 sm:mr-4 animate-pulse"></span>
+                   <ShinyText text="MongoDB & Firebase" speed={4} className="purple-theme" />
+                 </motion.li>
+                 <motion.li 
+                   className="flex items-center"
+                   whileHover={{ x: 5 }}
+                   transition={{ type: "spring", stiffness: 300 }}
+                 >
+                   <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mr-3 sm:mr-4 animate-pulse"></span>
+                   <ShinyText text="Python & AI" speed={4} className="text-green-300" />
+                 </motion.li>
+                 <motion.li 
+                   className="flex items-center"
+                   whileHover={{ x: 5 }}
+                   transition={{ type: "spring", stiffness: 300 }}
+                 >
+                   <span className="w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full mr-3 sm:mr-4 animate-pulse"></span>
+                   <ShinyText text="TailwindCSS" speed={4} className="gold-theme" />
+                </motion.li>
+              </ul>
+            </div>
+          </PixelCard>
+        </motion.div>
       </div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const SkillsPage = () => (
-  <section className="min-h-screen flex items-center justify-center px-6 md:px-8 relative">
+  <motion.section 
+    className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 relative"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
     {/* LiquidChrome Background */}
     <div className="absolute inset-0 z-0">
       <LiquidChrome
@@ -310,43 +395,75 @@ const SkillsPage = () => (
     {/* Dark overlay for better text readability */}
     <div className="absolute inset-0 bg-black/50 z-10"></div>
     
-    <div className="max-w-6xl mx-auto relative z-20">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
-        <ShinyText text="Teknoloji Yığınım" speed={4} className="blue-theme" />
-      </h2>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+    <div className="container max-w-6xl mx-auto relative z-20">
+      <motion.h2 
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-12 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <ShinyText text="Teknolojiler" speed={4} className="blue-theme" />
+      </motion.h2>
+      
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
         {[
           { name: 'React', variant: 'blue' },
-          { name: 'Next.js', variant: 'default' },
-          { name: 'TypeScript', variant: 'blue' },
-          { name: 'Tailwind CSS', variant: 'yellow' }, 
+          { name: 'Next.js', variant: 'blue' },
+          { name: 'MongoDB', variant: 'yellow' },
+          { name: 'Firebase', variant: 'yellow' }, 
+          { name: 'TailwindCSS', variant: 'pink' },
           { name: 'Node.js', variant: 'pink' },
-          { name: 'Python', variant: 'yellow' },
-          { name: 'MongoDB', variant: 'pink' },
-          { name: 'PostgreSQL', variant: 'blue' },
+          { name: 'Express.js', variant: 'default' },
+          { name: 'Python', variant: 'blue' },
+          { name: 'JavaScript', variant: 'yellow' },
+          { name: 'HTML/CSS', variant: 'pink' },
           { name: 'Git', variant: 'default' },
-          { name: 'Docker', variant: 'blue' },
-          { name: 'AWS', variant: 'yellow' },
-          { name: 'Figma', variant: 'pink' }
+          { name: 'AI/ML', variant: 'blue' }
         ].map((skill, index) => (
-          <PixelCard 
+          <motion.div
             key={skill.name}
-            variant={skill.variant as any}
-            className="h-20"
-            style={{ animationDelay: `${index * 0.1}s` }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ 
+              duration: 0.5, 
+              delay: index * 0.1,
+              type: "spring",
+              stiffness: 200 
+            }}
+            whileHover={{ 
+              scale: 1.1, 
+              y: -5,
+              transition: { type: "spring", stiffness: 300 }
+            }}
+            whileTap={{ scale: 0.95 }}
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <ShinyText text={skill.name} speed={3} className="text-sm font-semibold text-white" />
-            </div>
-          </PixelCard>
+                          <PixelCard 
+                variant={skill.variant as any}
+                className="h-16 sm:h-18 md:h-20 hover-effect touch-target cursor-pointer shadow-xl shadow-black/30 hover:shadow-2xl hover:shadow-purple-500/25 transition-all duration-300"
+                disablePixels={true}
+              >
+                <div className="w-full h-full flex items-center justify-center">
+                <ShinyText 
+                  text={skill.name} 
+                  speed={3} 
+                  className="text-xs sm:text-sm font-semibold text-white text-center" 
+                />
+              </div>
+            </PixelCard>
+          </motion.div>
         ))}
       </div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const ProjectsPage = () => (
-  <section className="min-h-screen flex items-center justify-center px-6 md:px-8 relative">
+  <motion.section 
+    className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 relative"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
     {/* Waves Background */}
     <div className="absolute inset-0 z-0">
       <Waves
@@ -366,54 +483,92 @@ const ProjectsPage = () => (
     {/* Dark overlay for better text readability */}
     <div className="absolute inset-0 bg-black/30 z-10"></div>
     
-    <div className="max-w-6xl mx-auto relative z-20">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-12 text-center">
+    <div className="container max-w-6xl mx-auto relative z-20">
+      <motion.h2 
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-12 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <ShinyText text="Projelerim" speed={4} className="gold-theme" />
-      </h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      </motion.h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {[
           { id: 1, variant: "blue", title: "E-Ticaret Platformu", tech: ["React", "Next.js", "TypeScript"] },
           { id: 2, variant: "pink", title: "Sosyal Medya Uygulaması", tech: ["React Native", "Node.js", "MongoDB"] },
           { id: 3, variant: "yellow", title: "Portfolyo Websitesi", tech: ["Next.js", "Three.js", "Tailwind"] }
-        ].map((project) => (
-          <PixelCard key={project.id} variant={project.variant as any} className="h-96">
-            <div className="absolute inset-0 p-6 flex flex-col">
-              <div className="h-48 bg-gradient-to-br from-white/5 to-white/10 rounded-xl flex items-center justify-center mb-6 backdrop-blur-sm">
-                <ShinyText text={`Proje ${project.id}`} speed={4} className="text-2xl font-bold" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-white mb-3">
-                  <ShinyText text={project.title} speed={3} className="blue-theme" />
-                </h3>
-                <p className="text-gray-300 mb-4 text-sm">
-                  Bu projede modern web teknolojileri kullanarak kullanıcı dostu ve performanslı bir uygulama geliştirdim.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((tech, index) => (
-                    <span key={tech} className="px-3 py-1 bg-white/10 text-white rounded-full text-xs backdrop-blur-sm">
-                      {tech}
-                    </span>
-                  ))}
+        ].map((project, index) => (
+          <motion.div
+            key={project.id}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.2 }}
+            whileHover={{ y: -10, scale: 1.02 }}
+          >
+            <PixelCard variant={project.variant as any} className="h-80 sm:h-88 md:h-96 hover-effect cursor-pointer shadow-2xl shadow-black/40 hover:shadow-4xl hover:shadow-purple-500/20 transition-all duration-500 premium-card" disablePixels={true}>
+              <div className="w-full h-full p-4 sm:p-6 flex flex-col">
+                <motion.div 
+                  className="h-32 sm:h-40 md:h-48 bg-gradient-to-br from-white/5 to-white/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 backdrop-blur-sm"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <ShinyText text={`Proje ${project.id}`} speed={4} className="text-lg sm:text-xl md:text-2xl font-bold" />
+                </motion.div>
+                <div className="flex-1">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 sm:mb-3">
+                    <ShinyText text={project.title} speed={3} className="blue-theme" />
+                  </h3>
+                  <p className="text-gray-300 mb-3 sm:mb-4 text-xs sm:text-sm leading-relaxed">
+                    Bu projede modern web teknolojileri kullanarak kullanıcı dostu ve performanslı bir uygulama geliştirdim.
+                  </p>
+                  <div className="flex flex-wrap gap-1 sm:gap-2 mb-3 sm:mb-4">
+                    {project.tech.map((tech, techIndex) => (
+                      <motion.span 
+                        key={tech} 
+                        className="px-2 sm:px-3 py-1 bg-white/10 text-white rounded-full text-xs backdrop-blur-sm"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: (index * 0.2) + (techIndex * 0.1) + 0.5 }}
+                        whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.2)" }}
+                      >
+                        {tech}
+                      </motion.span>
+                    ))}
+                  </div>
+                  <div className="flex gap-3 sm:gap-4">
+                    <motion.button 
+                      className="text-blue-300 hover:text-blue-400 transition-colors text-xs sm:text-sm font-semibold cursor-pointer touch-target"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <ShinyText text="Demo" speed={2} className="blue-theme" />
+                    </motion.button>
+                    <motion.button 
+                      className="text-gray-300 hover:text-white transition-colors text-xs sm:text-sm font-semibold cursor-pointer touch-target"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <ShinyText text="GitHub" speed={2} className="purple-theme" />
+                    </motion.button>
+                  </div>
                 </div>
-                <div className="flex gap-4">
-                  <button className="text-blue-300 hover:text-blue-400 transition-colors text-sm font-semibold cursor-pointer">
-                    <ShinyText text="Demo" speed={2} className="blue-theme" />
-                  </button>
-                  <button className="text-gray-300 hover:text-white transition-colors text-sm font-semibold cursor-pointer">
-                    <ShinyText text="GitHub" speed={2} className="purple-theme" />
-                  </button>
-                </div>
               </div>
-            </div>
-          </PixelCard>
+            </PixelCard>
+          </motion.div>
         ))}
       </div>
     </div>
-  </section>
+  </motion.section>
 );
 
 const ContactPage = () => (
-  <section className="min-h-screen flex items-center justify-center px-6 md:px-8 relative">
+  <motion.section 
+    className="min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8 relative"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+  >
     {/* LiquidChrome Background */}
     <div className="absolute inset-0 z-0">
       <LiquidChrome
@@ -426,36 +581,61 @@ const ContactPage = () => (
     {/* Dark overlay for better text readability */}
     <div className="absolute inset-0 bg-black/50 z-10"></div>
     
-    <div className="max-w-4xl mx-auto text-center relative z-20">
-      <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">
+    <div className="container max-w-4xl mx-auto text-center relative z-20">
+      <motion.h2 
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-8 sm:mb-12"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         <ShinyText text="İletişime Geçin" speed={4} className="purple-theme" />
-      </h2>
-      <p className="text-xl text-gray-300 mb-12">
-        Yeni projeler için işbirliği yapmak ister misiniz?
-      </p>
-      <div className="flex flex-col sm:flex-row gap-6 justify-center">
-        <a 
+      </motion.h2>
+      
+             <motion.p 
+         className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-12 px-4 leading-relaxed"
+         initial={{ opacity: 0, y: 20 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 0.6, delay: 0.2 }}
+       >
+         Benimle iletişime geçmek için aşağıdaki bağlantıları kullanabilirsiniz.
+       </motion.p>
+      
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+        <motion.a 
           href="mailto:email@example.com"
-          className="bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl"
+          className="bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl touch-target"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <ShinyText text="Email Gönder" speed={3} className="dark-theme" />
-        </a>
-        <a
+        </motion.a>
+        
+        <motion.a
           href="https://linkedin.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="border border-yellow-400/50 hover:border-yellow-400/80 text-yellow-300 hover:text-yellow-200 font-semibold py-4 px-8 rounded-full transition-all duration-300 hover:bg-yellow-400/10 cursor-pointer hover:shadow-lg shadow-yellow-400/20"
+          className="border border-yellow-400/50 hover:border-yellow-400/80 text-yellow-300 hover:text-yellow-200 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-full transition-all duration-300 hover:bg-yellow-400/10 cursor-pointer hover:shadow-lg shadow-yellow-400/20 touch-target"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
         >
           <ShinyText text="LinkedIn" speed={4} className="gold-theme" />
-        </a>
+        </motion.a>
       </div>
+      
     </div>
-  </section>
+  </motion.section>
 );
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState('home');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -463,6 +643,7 @@ export default function Home() {
 
   const navigateToPage = (page: string) => {
     setCurrentPage(page);
+    setMobileMenuOpen(false); // Close mobile menu when navigating
   };
 
   if (!mounted) {
@@ -526,12 +707,7 @@ export default function Home() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">P</span>
-                </div>
-                <ShinyText text="Portfolio" speed={4} className="purple-theme" />
-              </div>
+              <ShinyText text="Kaan Doğanay" speed={4} className="purple-theme" />
             </motion.button>
 
             {/* Desktop Navigation with GooeyNav */}
@@ -559,15 +735,134 @@ export default function Home() {
             </div>
 
             {/* Mobile Menu Button */}
-            <button className="md:hidden text-white p-2">
-              <div className="w-6 h-6 flex flex-col justify-center space-y-1">
-                <div className="w-full h-0.5 bg-white rounded"></div>
-                <div className="w-full h-0.5 bg-white rounded"></div>
-                <div className="w-full h-0.5 bg-white rounded"></div>
-              </div>
-            </button>
+            <motion.button 
+              className="md:hidden text-white p-2 touch-target"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              whileTap={{ scale: 0.95 }}
+            >
+              <motion.div 
+                className="w-6 h-6 flex flex-col justify-center space-y-1"
+                animate={mobileMenuOpen ? "open" : "closed"}
+              >
+                <motion.div 
+                  className="w-full h-0.5 bg-white rounded origin-center"
+                  variants={{
+                    closed: { rotate: 0, y: 0 },
+                    open: { rotate: 45, y: 6 }
+                  }}
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.div 
+                  className="w-full h-0.5 bg-white rounded"
+                  variants={{
+                    closed: { opacity: 1 },
+                    open: { opacity: 0 }
+                  }}
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.div 
+                  className="w-full h-0.5 bg-white rounded origin-center"
+                  variants={{
+                    closed: { rotate: 0, y: 0 },
+                    open: { rotate: -45, y: -6 }
+                  }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+            </motion.button>
           </div>
         </motion.nav>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              
+              {/* Menu */}
+              <motion.div
+                className="fixed top-20 right-4 w-64 bg-black/90 backdrop-blur-xl border border-white/20 rounded-2xl p-6 z-50 md:hidden"
+                initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              >
+                <div className="space-y-4">
+                  {[
+                    { label: 'Ana Sayfa', page: 'home', icon: '🏠' },
+                    { label: 'Hakkımda', page: 'about', icon: '👨‍💻' },
+                    { label: 'Yetenekler', page: 'skills', icon: '⚡' },
+                    { label: 'Projeler', page: 'projects', icon: '🚀' },
+                    { label: 'İletişim', page: 'contact', icon: '📞' }
+                  ].map((item, index) => (
+                    <motion.button
+                      key={item.page}
+                      onClick={() => navigateToPage(item.page)}
+                      className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all duration-300 touch-target ${
+                        currentPage === item.page 
+                          ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-400/30' 
+                          : 'hover:bg-white/10'
+                      }`}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <span className="text-xl">{item.icon}</span>
+                      <span className="text-white font-medium">{item.label}</span>
+                      {currentPage === item.page && (
+                        <motion.div
+                          className="ml-auto w-2 h-2 bg-blue-400 rounded-full"
+                          layoutId="activeDot"
+                          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        />
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+                
+                {/* Social Links */}
+                <div className="mt-6 pt-6 border-t border-white/20">
+                  <div className="flex justify-center space-x-4">
+                    <motion.a
+                      href="https://www.linkedin.com/in/kaan-do%C4%9Fanay-389428359/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center hover:from-blue-600 hover:to-blue-700 transition-all duration-300 touch-target shadow-lg"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    </motion.a>
+                    <motion.a
+                      href="https://github.com/kaandoganay55"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-800 rounded-full flex items-center justify-center hover:from-gray-600 hover:to-gray-700 transition-all duration-300 touch-target shadow-lg"
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                      </svg>
+                    </motion.a>
+                  </div>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
 
         {/* Current Page Content */}
         <div className="pt-20 md:pt-24">
@@ -612,11 +907,42 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-20 bg-black/90 py-8">
-        <div className="max-w-6xl mx-auto px-6 md:px-8 text-center">
-          <p className="text-gray-400">
-            © 2024 [İsminiz]. Tüm hakları saklıdır.
-          </p>
+      <footer className="relative z-20 bg-black/90 py-6 sm:py-8">
+        <div className="container max-w-6xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                         <p className="text-gray-400 text-sm sm:text-base text-center sm:text-left">
+               © 2024 Kaan Doğanay. Tüm hakları saklıdır.
+             </p>
+            
+            <div className="flex space-x-4 sm:space-x-6">
+              <motion.a
+                href="https://www.linkedin.com/in/kaan-do%C4%9Fanay-389428359/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-blue-400 transition-colors text-sm sm:text-base touch-target flex items-center space-x-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </motion.a>
+              <motion.a
+                href="https://github.com/kaandoganay55"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors text-sm sm:text-base touch-target flex items-center space-x-2"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <span>GitHub</span>
+              </motion.a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>

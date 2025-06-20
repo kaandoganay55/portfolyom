@@ -160,6 +160,7 @@ interface PixelCardProps {
   speed?: number;
   colors?: string;
   noFocus?: boolean;
+  disablePixels?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: ReactNode;
@@ -171,6 +172,7 @@ export default function PixelCard({
   speed,
   colors,
   noFocus,
+  disablePixels = false,
   className = "",
   style,
   children
@@ -267,33 +269,35 @@ export default function PixelCard({
     animationRef.current = requestAnimationFrame(() => doAnimate(name));
   };
 
-  const onMouseEnter = () => handleAnimation("appear");
-  const onMouseLeave = () => handleAnimation("disappear");
+  const onMouseEnter = () => !disablePixels && handleAnimation("appear");
+  const onMouseLeave = () => !disablePixels && handleAnimation("disappear");
   const onFocus = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
-    handleAnimation("appear");
+    !disablePixels && handleAnimation("appear");
   };
   const onBlur = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
-    handleAnimation("disappear");
+    !disablePixels && handleAnimation("disappear");
   };
 
   useEffect(() => {
-    initPixels();
-    const observer = new ResizeObserver(() => {
+    if (!disablePixels) {
       initPixels();
-    });
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-    return () => {
-      observer.disconnect();
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+      const observer = new ResizeObserver(() => {
+        initPixels();
+      });
+      if (containerRef.current) {
+        observer.observe(containerRef.current);
       }
-    };
+      return () => {
+        observer.disconnect();
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+        }
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [finalGap, finalSpeed, finalColors, finalNoFocus]);
+  }, [finalGap, finalSpeed, finalColors, finalNoFocus, disablePixels]);
 
   return (
     <div
@@ -306,10 +310,12 @@ export default function PixelCard({
       onBlur={finalNoFocus ? undefined : onBlur}
       tabIndex={finalNoFocus ? -1 : 0}
     >
-      <canvas
-        className="pixel-canvas"
-        ref={canvasRef}
-      />
+      {!disablePixels && (
+        <canvas
+          className="pixel-canvas"
+          ref={canvasRef}
+        />
+      )}
       {children}
     </div>
   );
