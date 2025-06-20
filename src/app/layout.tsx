@@ -1,16 +1,45 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Poppins, Space_Grotesk, Outfit, JetBrains_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({ 
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-inter",
   display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const poppins = Poppins({ 
+  subsets: ["latin", "latin-ext"],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  variable: "--font-poppins",
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({ 
+  subsets: ["latin", "latin-ext"],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: "--font-space-grotesk",
+  display: 'swap',
+});
+
+const outfit = Outfit({ 
+  subsets: ["latin", "latin-ext"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: "--font-outfit",
+  display: 'swap',
+});
+
+const jetbrainsMono = JetBrains_Mono({ 
+  subsets: ["latin", "latin-ext"],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
+  variable: "--font-jetbrains-mono",
+  display: 'swap',
+});
+
+const manrope = Manrope({ 
+  subsets: ["latin", "latin-ext"],
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  variable: "--font-manrope",
   display: 'swap',
 });
 
@@ -26,8 +55,8 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Portfolio - Full Stack Developer & UI/UX Designer",
-  description: "Modern web teknolojileri ile kullanıcı dostu ve performanslı uygulamalar geliştiren Full Stack Developer portföyü. React, Next.js, TypeScript uzmanı.",
+  title: "Kaan Doğanay - Full Stack Developer",
+  description: "Bilgisayar Mühendisi ve Full Stack Developer. React, Next.js, MongoDB, Firebase ve Python ile modern web uygulamaları geliştiriyorum.",
   keywords: ["Full Stack Developer", "UI/UX Designer", "React", "Next.js", "TypeScript", "Web Development", "Portfolio"],
   authors: [{ name: "Portfolio Owner" }],
   creator: "Portfolio Owner",
@@ -58,18 +87,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="tr">
+    <html lang="tr" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${outfit.variable} ${jetbrainsMono.variable} ${manrope.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${outfit.className} antialiased`}>
         {children}
       </body>
     </html>
