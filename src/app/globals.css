@@ -1171,37 +1171,38 @@ body {
   text-align: center;
 }
 
-/* Terminal Card Styles */
-.terminal-card {
-  padding: 1rem;
+/* Modern Terminal Card Styles - From Uiverse.io */
+.terminal-card-modern {
+  padding: 0.75rem;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  background-color: rgba(60, 60, 60, 0.3);
-  backdrop-filter: blur(12px);
+  border: 0.25px solid #c5c5c5;
+  border-radius: 20px;
+  background-color: navy;
+  backdrop-filter: blur(800px);
+  box-shadow: 0 0 40px 15px rgba(0, 0, 255, 0.3);
   min-width: 344px;
   max-width: 500px;
   margin: 0 auto;
 }
 
-.terminal-wrap {
+.terminal-wrap-modern {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   position: relative;
   z-index: 10;
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  border: 0.5px solid #525252;
+  border-radius: 10px;
   overflow: hidden;
 }
 
-.terminal-container {
+.terminal-modern {
   display: flex;
   flex-direction: column;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.terminal-head {
+.terminal-head-modern {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1213,7 +1214,7 @@ body {
   background-color: #202425;
 }
 
-.terminal-title {
+.terminal-title-modern {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1227,98 +1228,104 @@ body {
   margin: 0;
 }
 
-.terminal-title > svg {
+.terminal-title-modern > svg {
   height: 18px;
   width: 18px;
   margin-top: 2px;
   color: #006adc;
 }
 
-.terminal-copy-btn {
+.terminal-copy-btn-modern {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem;
-  border: 0.65px solid #c1c2c5;
+  padding: 0.3rem;
+  border: 0.65px solid darkgrey;
   margin-left: auto;
   border-radius: 6px;
   background-color: #202425;
   color: #8e8e8e;
   cursor: pointer;
+  box-shadow: 0 0 15px deepskyblue;
   transition: all 0.2s ease;
 }
 
-.terminal-copy-btn > svg {
-  width: 20px;
-  height: 20px;
+.terminal-copy-btn-modern > svg {
+  width: 15px;
+  height: 15px;
+  box-shadow: 0 0 40px 2.5px rgba(0, 0, 255, 0.5);
+  animation: bounce 2s infinite;
 }
 
-.terminal-body {
+.terminal-copy-btn-modern:active > svg > path,
+.terminal-copy-btn-modern:focus-within > svg > path {
+  animation: clipboard-check 5000ms linear forwards;
+}
+
+.terminal-body-modern {
   display: flex;
   flex-direction: column;
   position: relative;
-  border-bottom-right-radius: 8px;
-  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
   overflow-x: auto;
   padding: 1rem;
-  line-height: 19px;
+  line-height: 20px;
   color: white;
   background-color: black;
   white-space: nowrap;
 }
 
-.terminal-line {
+.terminal-pre-modern {
   display: flex;
   flex-direction: row;
   align-items: center;
   text-wrap: nowrap;
   white-space: pre;
-  background-color: transparent;
   overflow: hidden;
   box-sizing: border-box;
   font-size: 16px;
 }
 
-.terminal-prompt {
+.terminal-prompt-modern {
   color: #575757;
 }
 
-.terminal-command {
+.terminal-command-modern {
   color: #e34ba9;
 }
 
-.terminal-typing {
+.terminal-cmd-modern {
   height: 19px;
   position: relative;
   display: flex;
   align-items: center;
   flex-direction: row;
-  color: #00d4ff;
 }
 
-.terminal-typing::before {
-  content: attr(data-command);
+.terminal-cmd-modern::before {
+  content: attr(data-cmd);
   position: relative;
   display: block;
   white-space: nowrap;
   overflow: hidden;
   background-color: transparent;
-  animation: terminal-typing 4s steps(30) infinite;
+  animation: terminal-inputs 8s steps(22) infinite;
 }
 
-.terminal-typing::after {
-  content: "";
+.terminal-cmd-modern::after {
+  content: "_";
   position: relative;
   display: block;
   height: 100%;
   overflow: hidden;
   background-color: transparent;
   border-right: 0.15em solid #e34ba9;
-  animation: terminal-cursor 0.8s step-end infinite alternate, terminal-blink 0.8s infinite;
+  animation: terminal-cursor-modern 0.5s step-end infinite alternate, terminal-blinking 0.4s infinite;
 }
 
-/* Terminal Animations */
-@keyframes terminal-blink {
+/* Modern Terminal Animations */
+@keyframes terminal-blinking {
   20%, 80% {
     transform: scaleY(1);
   }
@@ -1327,31 +1334,41 @@ body {
   }
 }
 
-@keyframes terminal-cursor {
+@keyframes terminal-cursor-modern {
   50% {
     border-right-color: transparent;
   }
 }
 
-@keyframes terminal-typing {
+@keyframes terminal-inputs {
   0%, 100% {
     width: 0;
   }
   10%, 90% {
-    width: 100%;
+    width: 58px;
+  }
+  30%, 70% {
+    width: 215px;
     max-width: max-content;
   }
 }
 
-/* Responsive Terminal */
+@keyframes clipboard-check {
+  100% {
+    color: deepskyblue;
+    d: path("M 9 5 H 7 a 2 2 0 0 0 -2 2 v 12 a 2 2 0 0 0 2 2 h 10 a 2 2 0 0 0 2 -2 V 7 a 2 2 0 0 0 -2 -2 h -2 M 9 5 a 2 2 0 0 0 2 2 h 2 a 2 2 0 0 0 2 -2 M 9 5 a 2 2 0 0 1 2 -2 h 2 a 2 2 0 0 1 2 2 m -6 9 l 2 2 l 4 -4");
+  }
+}
+
+/* Responsive Modern Terminal */
 @media (max-width: 640px) {
-  .terminal-card {
+  .terminal-card-modern {
     min-width: auto;
     max-width: 100%;
-    padding: 0.75rem;
+    padding: 0.5rem;
   }
   
-  .terminal-line {
+  .terminal-pre-modern {
     font-size: 14px;
   }
 }
