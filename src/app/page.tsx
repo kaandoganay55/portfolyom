@@ -2,13 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  SiReact, 
+  SiNextdotjs, 
+  SiMongodb, 
+  SiFirebase, 
+  SiPython, 
+  SiTailwindcss
+} from 'react-icons/si';
+import { GiBrain } from 'react-icons/gi';
 import ShinyText from '@/components/ShinyText';
-import PixelCard from '@/components/PixelCard';
 import AnimatedSection from '@/components/AnimatedSection';
-import HoverCard from '@/components/HoverCard';
 import GradientCard from '@/components/GradientCard';
 import TerminalCard from '@/components/TerminalCard';
-
 import ModernParticles from '@/components/ModernParticles';
 
 // Animation variants
@@ -26,6 +32,16 @@ const containerVariants = {
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [openCards, setOpenCards] = useState<{[key: number]: boolean}>({});
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  
+  const animatedTexts = [
+    { text: "DOĞANAY", color: "from-blue-400 to-blue-600" },
+    { text: "DEVELOPER", color: "from-purple-400 to-purple-600" },
+    { text: "ENGINEER", color: "from-green-400 to-green-600" },
+    { text: "CODER", color: "from-yellow-400 to-yellow-600" },
+    { text: "DESIGNER", color: "from-pink-400 to-pink-600" }
+  ];
 
   // Smooth scroll function
   const scrollToSection = (sectionId: string) => {
@@ -38,6 +54,17 @@ export default function Home() {
     }
     setMobileMenuOpen(false);
   };
+
+  // Text animation for hero section
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTextIndex((prevIndex) => 
+        (prevIndex + 1) % animatedTexts.length
+      );
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [animatedTexts.length]);
 
   // Scroll spy to track active section
   useEffect(() => {
@@ -342,16 +369,48 @@ export default function Home() {
             initial="hidden"
             animate="visible"
           >
-            {/* Animated Main Title - CRISP & CLEAR */}
+            {/* Animated Main Title with Text Animation */}
             <motion.div 
               className="mb-6 sm:mb-8 px-2"
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <h1 className="text-gradient-modern text-crisp font-heading leading-tight">
-                Kaan Doğanay
-              </h1>
+              <div className="text-gradient-modern text-crisp font-heading leading-tight flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                <span className="text-white">KAAN</span>
+                <div className="relative h-[1.2em] flex items-center justify-center min-w-[300px] sm:min-w-[400px]">
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={currentTextIndex}
+                      className={`absolute bg-gradient-to-r ${animatedTexts[currentTextIndex].color} bg-clip-text text-transparent font-black`}
+                      style={{
+                        textShadow: '0 0 7px rgba(255,255,255,.3), 0 0 3px rgba(255,255,255,.3)'
+                      }}
+                      initial={{ 
+                        y: 50,
+                        opacity: 0,
+                        scale: 0.8
+                      }}
+                      animate={{ 
+                        y: 0,
+                        opacity: 1,
+                        scale: 1
+                      }}
+                      exit={{ 
+                        y: -50,
+                        opacity: 0,
+                        scale: 0.8
+                      }}
+                      transition={{
+                        duration: 0.5,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }}
+                    >
+                      {animatedTexts[currentTextIndex].text}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+              </div>
             </motion.div>
             
             {/* Animated Subtitle */}
@@ -483,60 +542,203 @@ export default function Home() {
             </AnimatedSection>
             
             <AnimatedSection 
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10"
+              className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 justify-items-center"
               stagger={true}
             >
               {[
                 {
                   icon: '⚛️',
                   title: 'Frontend Development',
-                  description: 'React, Next.js ve modern JavaScript teknolojileri ile responsive web uygulamaları',
-                  color: 'blue',
-                  hoverEffect: 'lift' as const
+                  description: 'React, Next.js ve modern JavaScript teknolojileri ile responsive web uygulamaları geliştiriyorum. Kullanıcı deneyimini ön planda tutarak modern ve etkileyici arayüzler tasarlıyorum.',
+                  coverColor: 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)', // Dark slate
+                  textColor: '#e2e8f0'
                 },
                 {
                   icon: '🔧',
                   title: 'Backend Development',
-                  description: 'Node.js, Express.js ve MongoDB ile güçlü backend sistemleri',
-                  color: 'yellow',
-                  hoverEffect: 'glow' as const
+                  description: 'Node.js, Express.js ve MongoDB ile güçlü backend sistemleri geliştiriyorum. API tasarımı, veritabanı yönetimi ve sunucu tarafı programlama konularında deneyimliyim.',
+                  coverColor: 'linear-gradient(135deg, #374151 0%, #4b5563 50%, #6b7280 100%)', // Dark gray
+                  textColor: '#f3f4f6'
                 },
                 {
                   icon: '🤖',
                   title: 'Yapay Zeka',
-                  description: 'Python kullanarak makine öğrenmesi ve AI projeleri geliştiriyorum',
-                  color: 'pink',
-                  hoverEffect: 'tilt' as const
+                  description: 'Python kullanarak makine öğrenmesi ve AI projeleri geliştiriyorum. Veri analizi, model eğitimi ve yapay zeka algoritmalarıyla çalışmayı seviyorum.',
+                  coverColor: 'linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%)', // Dark blue-gray
+                  textColor: '#e5e7eb'
                 }
-              ].map((service) => (
+              ].map((service, index) => (
                 <motion.div
                   key={service.title}
                   variants={{
                     hidden: { opacity: 0, y: 30 },
                     visible: { opacity: 1, y: 0 }
                   }}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="w-full max-w-[280px]"
                 >
-                  <HoverCard 
-                    className="h-60 sm:h-64 md:h-72 p-6 sm:p-8 shadow-2xl shadow-black/40 hover:shadow-4xl hover:shadow-purple-500/30 transition-all duration-500 border border-slate-700/30 cursor-pointer"
-                    hoverEffect={service.hoverEffect}
-                    borderGradient={true}
+                  {/* 3D Book Card */}
+                  <div 
+                    className="relative rounded-xl w-full h-[350px] flex items-center justify-center text-black cursor-pointer group"
+                    style={{
+                      backgroundColor: 'whitesmoke',
+                      boxShadow: '1px 1px 12px #000',
+                      transform: 'preserve-3d',
+                      perspective: '2000px'
+                    }}
                   >
-                    <div className="w-full h-full flex flex-col items-center text-center">
+                    {/* Book Content (Back) */}
+                    <div className="p-8 flex flex-col items-center justify-center text-center h-full">
                       <motion.div 
-                        className="text-4xl sm:text-5xl mb-4 sm:mb-6"
-                        whileHover={{ scale: 1.2, rotate: 10 }}
-                        transition={{ type: "spring", stiffness: 300 }}
+                        className="text-5xl mb-6"
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ 
+                          delay: 0.5 + index * 0.2, 
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 20
+                        }}
                       >
                         {service.icon}
                       </motion.div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">
+                      <motion.h3 
+                        className="text-xl font-bold text-gray-800 mb-4"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 + index * 0.2, duration: 0.6 }}
+                      >
                         <ShinyText text={service.title} speed={3} className="gold-theme" />
-                      </h3>
-                      <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        {service.description}
-                      </p>
+                      </motion.h3>
+                      <motion.p 
+                        className="text-gray-700 text-sm leading-relaxed"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.9 + index * 0.2, duration: 0.8 }}
+                      >
+                        {service.description.split(' ').map((word, wordIndex) => (
+                          <motion.span
+                            key={wordIndex}
+                            className="inline-block mr-1"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ 
+                              delay: 1.1 + index * 0.2 + wordIndex * 0.05,
+                              duration: 0.3
+                            }}
+                          >
+                            {word}
+                          </motion.span>
+                        ))}
+                      </motion.p>
                     </div>
-                  </HoverCard>
+                    
+                    {/* Book Cover (Front) */}
+                    <motion.div 
+                      className="absolute top-0 w-full h-full rounded-xl cursor-pointer flex items-center justify-center touch-target"
+                      style={{
+                        background: service.coverColor,
+                        boxShadow: '1px 1px 12px #000',
+                        transformOrigin: '0 50%',
+                        backfaceVisibility: 'hidden'
+                      }}
+                      animate={{
+                        rotateY: openCards[index] ? -80 : 0
+                      }}
+                      whileHover={{
+                        rotateY: -80,
+                        transition: { duration: 0.5, ease: "easeInOut" }
+                      }}
+                      onClick={() => {
+                        setOpenCards(prev => ({
+                          ...prev,
+                          [index]: !prev[index]
+                        }));
+                      }}
+                      transition={{ duration: 0.5, ease: "easeInOut" }}
+                      initial={{ rotateY: 0 }}
+                    >
+                                            <div className="flex flex-col items-center text-center p-6">
+                        <motion.div 
+                          className="text-6xl mb-4"
+                          initial={{ scale: 0, rotate: 360 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          transition={{ 
+                            delay: 0.3 + index * 0.1,
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 25
+                          }}
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                        >
+                          {service.icon}
+                        </motion.div>
+                        <motion.h3 
+                          className="text-xl font-bold mb-4"
+                          style={{ color: service.textColor }}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+                        >
+                          {service.title.split('').map((char, charIndex) => (
+                            <motion.span
+                              key={charIndex}
+                              className="inline-block"
+                              initial={{ opacity: 0, y: -20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ 
+                                delay: 0.7 + index * 0.1 + charIndex * 0.03,
+                                duration: 0.2
+                              }}
+                            >
+                              {char === ' ' ? '\u00A0' : char}
+                            </motion.span>
+                          ))}
+                        </motion.h3>
+                        <motion.div 
+                          className="flex flex-col items-center"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
+                        >
+                          <motion.p 
+                            className="text-sm opacity-90 mb-2"
+                            style={{ color: service.textColor }}
+                            animate={{
+                              opacity: [0.7, 1, 0.7]
+                            }}
+                            transition={{
+                              duration: 3,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            <span className="hidden md:inline">Detayları Görmek İçin Hover Yapın</span>
+                            <span className="md:hidden">Detayları Görmek İçin Dokunun</span>
+                          </motion.p>
+                          {/* Touch indicator for mobile */}
+                          <motion.div
+                            className="md:hidden text-2xl opacity-60"
+                            animate={{
+                              scale: [1, 1.2, 1],
+                              opacity: [0.6, 1, 0.6],
+                              rotate: [0, 10, -10, 0]
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut"
+                            }}
+                          >
+                            👆
+                          </motion.div>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </div>
                 </motion.div>
               ))}
             </AnimatedSection>
@@ -565,31 +767,96 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="space-y-6"
+                className="space-y-8"
               >
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+                {/* Enhanced Name Title */}
+                <motion.h3 
+                  className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-purple-200 mb-8 tracking-tight leading-tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.8 }}
+                  viewport={{ once: true }}
+                >
                   Kaan Doğanay
-                    </h3>
-                <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                  Balıkesir Üniversitesi Bilgisayar Mühendisliği mezunuyum. Modern web teknolojileri 
-                  ile kullanıcı deneyimini ön planda tutan uygulamalar geliştirmeye odaklanıyorum.
-                </p>
-                <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-                  React, Next.js, MongoDB, Firebase gibi teknolojilerle frontend ve backend geliştirme 
-                  yapıyorum. Aynı zamanda Python ile yapay zeka alanında kendimi geliştirmeye devam ediyorum.
-                </p>
+                </motion.h3>
+
+                {/* Enhanced Description Paragraphs */}
+                <motion.div className="space-y-6">
+                  <motion.p 
+                    className="text-lg sm:text-xl md:text-2xl text-slate-200 leading-relaxed font-light tracking-wide"
+                    style={{
+                      fontFamily: "'Inter', 'system-ui', sans-serif",
+                      lineHeight: "1.7"
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.8 }}
+                    viewport={{ once: true }}
+                  >
+                    <span className="font-medium text-white">Balıkesir Üniversitesi Bilgisayar Mühendisliği</span> mezunuyum. 
+                    Modern web teknolojileri ile <span className="text-blue-300 font-medium">kullanıcı deneyimini ön planda tutan</span> uygulamalar 
+                    geliştirmeye odaklanıyorum.
+                  </motion.p>
+                  
+                  <motion.p 
+                    className="text-lg sm:text-xl md:text-2xl text-slate-200 leading-relaxed font-light tracking-wide"
+                    style={{
+                      fontFamily: "'Inter', 'system-ui', sans-serif",
+                      lineHeight: "1.7"
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7, duration: 0.8 }}
+                    viewport={{ once: true }}
+                  >
+                    <span className="text-purple-300 font-medium">React, Next.js, MongoDB, Firebase</span> gibi teknolojilerle 
+                    frontend ve backend geliştirme yapıyorum. Aynı zamanda <span className="text-green-300 font-medium">Python ile yapay zeka</span> alanında 
+                    kendimi geliştirmeye devam ediyorum.
+                  </motion.p>
+                </motion.div>
                 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-6 mt-8">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-400 mb-2">1+</div>
-                    <div className="text-slate-400 text-sm">Yıl Deneyim</div>
+                {/* Enhanced Stats */}
+                <motion.div 
+                  className="grid grid-cols-2 gap-8 mt-12"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.8 }}
+                  viewport={{ once: true }}
+                >
+                  <motion.div 
+                    className="text-center group cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <motion.div 
+                      className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-clip-text text-transparent"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      1+
+                    </motion.div>
+                    <div className="text-slate-300 text-sm sm:text-base md:text-lg font-medium tracking-wider uppercase">
+                      Yıl Deneyim
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-purple-400 mb-2">10+</div>
-                    <div className="text-slate-400 text-sm">Proje</div>
-                  </div>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="text-center group cursor-pointer"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <motion.div 
+                      className="text-4xl sm:text-5xl md:text-6xl font-black mb-3 bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 bg-clip-text text-transparent"
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      10+
+                    </motion.div>
+                    <div className="text-slate-300 text-sm sm:text-base md:text-lg font-medium tracking-wider uppercase">
+                      Proje
                 </div>
+                  </motion.div>
+                </motion.div>
               </motion.div>
               
               <motion.div
@@ -597,49 +864,149 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -5 }}
+                className="w-full"
               >
-                <PixelCard variant="blue" className="h-80 sm:h-96 hover-effect cursor-pointer shadow-2xl shadow-blue-500/20 hover:shadow-4xl hover:shadow-blue-500/40 transition-all duration-500 border border-slate-700/30" disablePixels={true}>
-                  <div className="w-full h-full p-6 sm:p-8 flex flex-col">
-                    <h4 className="text-xl sm:text-2xl font-bold text-white mb-6 sm:mb-8">
+                {/* Modern Card with same style as projects */}
+                <motion.div
+                  className="relative flex flex-col justify-center w-full h-80 sm:h-96 bg-[#212121] border-2 border-[#313131] rounded-xl p-6 sm:p-8 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_10px_20px_rgba(0,0,0,0.2)] cursor-pointer group"
+                  style={{
+                    boxShadow: `0 10px 20px rgba(0,0,0,0.2)`,
+                  }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -5,
+                    boxShadow: `0 0 20px rgba(59, 130, 246, 0.8)`,
+                    borderColor: "#3b82f6"
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex flex-col items-start gap-5 text-[#e8e8e8] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] h-full">
+                    {/* Card Title */}
+                    <motion.h4 
+                      className="font-bold text-xl sm:text-2xl text-white transition-colors duration-300"
+                      style={{ color: 'white' }}
+                      whileHover={{ 
+                        scale: 1.05,
+                        color: "#3b82f6"
+                      }}
+                    >
                       <ShinyText text="Deneyim Alanlarım" speed={3} className="gold-theme" />
-                    </h4>
-                    <ul className="space-y-4 sm:space-y-6 text-slate-300 flex-1">
+                    </motion.h4>
+                    
+                                         {/* Experience List */}
+                     <ul className="space-y-4 sm:space-y-6 text-slate-300 flex-1 w-full">
                       <motion.li 
                         className="flex items-center group cursor-pointer"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <span className="w-3 h-3 bg-blue-400 rounded-full mr-4 animate-pulse group-hover:scale-125 transition-transform duration-300"></span>
+                         <div className="flex items-center mr-4 space-x-2">
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: 360 }}
+                             transition={{ duration: 0.5 }}
+                           >
+                             <SiReact className="w-5 h-5 text-blue-400 group-hover:text-blue-300" />
+                           </motion.div>
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: -360 }}
+                             transition={{ duration: 0.5, delay: 0.1 }}
+                           >
+                             <SiNextdotjs className="w-5 h-5 text-white group-hover:text-gray-300" />
+                           </motion.div>
+                         </div>
                         <ShinyText text="React & Next.js" speed={4} className="blue-theme" />
                       </motion.li>
+                       
                       <motion.li 
                         className="flex items-center group cursor-pointer"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <span className="w-3 h-3 bg-purple-400 rounded-full mr-4 animate-pulse group-hover:scale-125 transition-transform duration-300"></span>
+                         <div className="flex items-center mr-4 space-x-2">
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: 360 }}
+                             transition={{ duration: 0.5 }}
+                           >
+                             <SiMongodb className="w-5 h-5 text-green-400 group-hover:text-green-300" />
+                           </motion.div>
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: -360 }}
+                             transition={{ duration: 0.5, delay: 0.1 }}
+                           >
+                             <SiFirebase className="w-5 h-5 text-yellow-400 group-hover:text-yellow-300" />
+                           </motion.div>
+                         </div>
                         <ShinyText text="MongoDB & Firebase" speed={4} className="purple-theme" />
                       </motion.li>
+                       
                       <motion.li 
                         className="flex items-center group cursor-pointer"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <span className="w-3 h-3 bg-green-400 rounded-full mr-4 animate-pulse group-hover:scale-125 transition-transform duration-300"></span>
+                         <div className="flex items-center mr-4 space-x-2">
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: 360 }}
+                             transition={{ duration: 0.5 }}
+                           >
+                             <SiPython className="w-5 h-5 text-blue-400 group-hover:text-blue-300" />
+                           </motion.div>
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: -360 }}
+                             transition={{ duration: 0.5, delay: 0.1 }}
+                           >
+                             <GiBrain className="w-5 h-5 text-purple-400 group-hover:text-purple-300" />
+                           </motion.div>
+                         </div>
                         <ShinyText text="Python & AI" speed={4} className="text-green-300" />
                       </motion.li>
+                       
                       <motion.li 
                         className="flex items-center group cursor-pointer"
                         whileHover={{ x: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <span className="w-3 h-3 bg-yellow-400 rounded-full mr-4 animate-pulse group-hover:scale-125 transition-transform duration-300"></span>
+                         <div className="flex items-center mr-4">
+                           <motion.div
+                             whileHover={{ scale: 1.2, rotate: 360 }}
+                             transition={{ duration: 0.5 }}
+                           >
+                             <SiTailwindcss className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
+                           </motion.div>
+                         </div>
                         <ShinyText text="TailwindCSS" speed={4} className="gold-theme" />
                       </motion.li>
                     </ul>
                   </div>
-                </PixelCard>
+                  
+                  {/* Floating animation elements - Blue theme */}
+                  <motion.div
+                    className="absolute top-4 right-4 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5]
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                  
+                  <motion.div
+                    className="absolute bottom-4 left-4 w-2 h-2 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    animate={{
+                      scale: [1, 1.5, 1],
+                      opacity: [0.3, 0.8, 0.3]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.5
+                    }}
+                  />
+                </motion.div>
               </motion.div>
             </div>
           </div>
@@ -717,11 +1084,41 @@ export default function Home() {
               <ShinyText text="Projelerim" speed={4} className="gold-theme" />
           </motion.h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-        {[
-          { id: 1, variant: "blue", title: "E-Ticaret Platformu", tech: ["React", "Next.js", "TypeScript"] },
-          { id: 2, variant: "pink", title: "Sosyal Medya Uygulaması", tech: ["React Native", "Node.js", "MongoDB"] },
-          { id: 3, variant: "yellow", title: "Portfolyo Websitesi", tech: ["Next.js", "Three.js", "Tailwind"] }
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 justify-items-center">
+              {[
+                { 
+                  id: 1, 
+                  title: "E-Ticaret Platformu", 
+                  description: "Modern e-ticaret platformu. React, Next.js ve TypeScript kullanarak geliştirilen tam fonksiyonlu bir online mağaza uygulaması. Responsive tasarım ve kullanıcı dostu arayüz ile optimize edilmiştir.",
+                  tech: ["React", "Next.js", "TypeScript"],
+                  demoUrl: "#",
+                  githubUrl: "#",
+                  glowColor: "rgba(34, 197, 94, 0.8)", // Green glow
+                  hoverGlow: "rgba(34, 197, 94, 0.3)",
+                  borderColor: "#22c55e"
+                },
+                { 
+                  id: 2, 
+                  title: "Sosyal Medya Uygulaması", 
+                  description: "React Native ile geliştirilmiş sosyal medya platformu. Real-time mesajlaşma, post paylaşımı ve kullanıcı etkileşimi özellikleri içeren modern mobil uygulama.",
+                  tech: ["React Native", "Node.js", "MongoDB"],
+                  demoUrl: "#",
+                  githubUrl: "#",
+                  glowColor: "rgba(9, 117, 241, 0.8)", // Blue glow (original)
+                  hoverGlow: "rgba(9, 117, 241, 0.3)",
+                  borderColor: "#0974f1"
+                },
+                { 
+                  id: 3, 
+                  title: "Portfolyo Websitesi", 
+                  description: "Modern ve interaktif kişisel portfolyo sitesi. Three.js ile 3D animasyonlar, smooth scroll efektleri ve responsive tasarım özellikleri içerir.",
+                  tech: ["Next.js", "Three.js", "Tailwind"],
+                  demoUrl: "#",
+                  githubUrl: "#",
+                  glowColor: "rgba(168, 85, 247, 0.8)", // Purple glow
+                  hoverGlow: "rgba(168, 85, 247, 0.3)",
+                  borderColor: "#a855f7"
+                }
               ].map((project, index) => (
                 <motion.div
                   key={project.id}
@@ -729,44 +1126,111 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
+                  className="w-full max-w-80"
                 >
-                  <PixelCard variant={project.variant as 'blue' | 'yellow' | 'pink' | 'default'} className="h-96 sm:h-[26rem] md:h-[28rem] cursor-pointer shadow-2xl shadow-black/40 border border-slate-700/30" disablePixels={true}>
-                    <div className="w-full h-full p-6 sm:p-8 flex flex-col">
-                      <div className="h-40 sm:h-48 md:h-52 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-sm border border-slate-600/30">
-                        <ShinyText text={`Proje ${project.id}`} speed={4} className="text-xl sm:text-2xl md:text-3xl font-bold" />
-                      </div>
-                      <div className="flex-1 flex flex-col">
-                        <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
+                  {/* Modern Card */}
+                  <motion.div
+                    className="relative flex flex-col justify-center w-full min-h-[480px] bg-[#212121] border-2 border-[#313131] rounded-xl p-8 overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] shadow-[0_10px_20px_rgba(0,0,0,0.2)] cursor-pointer group"
+                    style={{
+                      boxShadow: `0 10px 20px rgba(0,0,0,0.2)`,
+                    }}
+                    whileHover={{ 
+                      scale: 1.02,
+                      y: -5,
+                      boxShadow: `0 0 20px ${project.glowColor}`,
+                      borderColor: project.borderColor
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="flex flex-col items-start gap-5 text-[#e8e8e8] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]">
+                                             {/* Project Title */}
+                       <motion.h3 
+                         className="font-bold text-2xl sm:text-3xl text-white transition-colors duration-300"
+                         style={{ color: 'white' }}
+                         whileHover={{ 
+                           scale: 1.05,
+                           color: project.borderColor
+                         }}
+                       >
                   <ShinyText text={project.title} speed={3} className="blue-theme" />
-                </h3>
-                        <p className="text-slate-300 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed flex-1">
-                  Bu projede modern web teknolojileri kullanarak kullanıcı dostu ve performanslı bir uygulama geliştirdim.
-                </p>
-                        <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
-                          {project.tech.map((tech) => (
-                            <span 
+                       </motion.h3>
+                      
+                      {/* Tech Stack */}
+                      <div className="flex flex-wrap gap-2 mb-2">
+                                                 {project.tech.map((tech, techIndex) => (
+                           <motion.span 
                               key={tech} 
-                              className="px-3 sm:px-4 py-1.5 bg-slate-700/50 text-white rounded-lg text-xs sm:text-sm backdrop-blur-sm border border-slate-600/30"
+                             className="px-3 py-1 bg-slate-700/50 text-white rounded-md text-xs font-medium backdrop-blur-sm border border-slate-600/30"
+                             initial={{ opacity: 0, scale: 0.8 }}
+                             whileInView={{ opacity: 1, scale: 1 }}
+                             transition={{ delay: index * 0.2 + techIndex * 0.1 }}
+                             whileHover={{ 
+                               scale: 1.1, 
+                               backgroundColor: project.hoverGlow,
+                               borderColor: project.borderColor
+                             }}
                             >
                       {tech}
-                            </span>
+                           </motion.span>
                   ))}
                 </div>
-                        <div className="flex gap-4 sm:gap-6">
-                          <button 
-                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold cursor-pointer shadow-lg"
-                          >
-                            <ShinyText text="Demo" speed={2} className="dark-theme" />
-                          </button>
-                          <button 
-                            className="flex-1 border border-slate-600 text-slate-300 py-3 px-4 rounded-xl font-semibold cursor-pointer"
+                      
+                      {/* Project Description */}
+                      <p className="leading-relaxed text-sm sm:text-base text-slate-300 mb-4">
+                        {project.description}
+                      </p>
+                      
+                                             {/* Action Button */}
+                       <div className="flex justify-center w-full">
+                         <motion.a
+                           href={project.githubUrl}
+                           className="w-full text-center text-[#e8e8e8] no-underline py-3 px-6 font-semibold border-2 border-[#313131] cursor-pointer bg-transparent rounded-md transition-all duration-300"
+                           style={{
+                             borderColor: '#313131'
+                           }}
+                           whileHover={{ 
+                             scale: 1.05,
+                             borderColor: project.borderColor,
+                             color: project.borderColor,
+                             boxShadow: `0 0 10px ${project.hoverGlow}`
+                           }}
+                           whileTap={{ scale: 0.95 }}
                           >
                     <ShinyText text="GitHub" speed={2} className="purple-theme" />
-                          </button>
+                         </motion.a>
                 </div>
               </div>
-            </div>
-          </PixelCard>
+                    
+                                         {/* Floating animation elements */}
+                     <motion.div
+                       className="absolute top-4 right-4 w-3 h-3 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                       style={{ backgroundColor: project.borderColor }}
+                       animate={{
+                         scale: [1, 1.2, 1],
+                         opacity: [0.5, 1, 0.5]
+                       }}
+                       transition={{
+                         duration: 2,
+                         repeat: Infinity,
+                         ease: "easeInOut"
+                       }}
+                     />
+                     
+                     <motion.div
+                       className="absolute bottom-4 left-4 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                       style={{ backgroundColor: project.borderColor, opacity: 0.7 }}
+                       animate={{
+                         scale: [1, 1.5, 1],
+                         opacity: [0.3, 0.8, 0.3]
+                       }}
+                       transition={{
+                         duration: 3,
+                         repeat: Infinity,
+                         ease: "easeInOut",
+                         delay: 0.5
+                       }}
+                     />
+                  </motion.div>
                 </motion.div>
         ))}
       </div>
