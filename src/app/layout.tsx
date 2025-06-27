@@ -1,45 +1,25 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Poppins, Space_Grotesk, Outfit, JetBrains_Mono, Manrope } from "next/font/google";
+import { Inter, Poppins, Outfit } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ 
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin"],
   variable: "--font-inter",
   display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
 });
 
 const poppins = Poppins({ 
-  subsets: ["latin", "latin-ext"],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  subsets: ["latin"],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: "--font-poppins",
   display: 'swap',
 });
 
-const spaceGrotesk = Space_Grotesk({ 
-  subsets: ["latin", "latin-ext"],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: "--font-space-grotesk",
-  display: 'swap',
-});
-
 const outfit = Outfit({ 
-  subsets: ["latin", "latin-ext"],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  subsets: ["latin"],
+  weight: ['300', '400', '500', '600', '700', '800'],
   variable: "--font-outfit",
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({ 
-  subsets: ["latin", "latin-ext"],
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
-  variable: "--font-jetbrains-mono",
-  display: 'swap',
-});
-
-const manrope = Manrope({ 
-  subsets: ["latin", "latin-ext"],
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  variable: "--font-manrope",
   display: 'swap',
 });
 
@@ -91,12 +71,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className={`${inter.variable} ${poppins.variable} ${spaceGrotesk.variable} ${outfit.variable} ${jetbrainsMono.variable} ${manrope.variable}`}>
+    <html lang="tr" className={`${inter.variable} ${poppins.variable} ${outfit.variable}`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className={`${outfit.className} antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         {children}
       </body>
     </html>

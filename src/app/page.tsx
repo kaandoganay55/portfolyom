@@ -6,6 +6,8 @@ import ShinyText from '@/components/ShinyText';
 import PixelCard from '@/components/PixelCard';
 import AnimatedSection from '@/components/AnimatedSection';
 import HoverCard from '@/components/HoverCard';
+import GradientCard from '@/components/GradientCard';
+import TerminalCard from '@/components/TerminalCard';
 
 import ModernParticles from '@/components/ModernParticles';
 
@@ -157,22 +159,12 @@ export default function Home() {
               <motion.button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`nav-link-modern cursor-pointer touch-target ${
-                  activeSection === item.id ? 'active' : ''
-                }`}
-                whileHover={{ scale: 1.05, y: -2 }}
+                className={`btn-23 ${activeSection === item.id ? 'active' : ''}`}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <span className="relative z-10 font-medium text-white text-sm lg:text-base">{item.label}</span>
-                
-                {/* Active indicator */}
-                {activeSection === item.id && (
-                  <motion.div
-                    className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-blue-400 rounded-full glow-effect"
-                    layoutId="activeNavDot"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
+                <span className="text">{item.label}</span>
+                <span aria-hidden className="marquee">{item.label}</span>
               </motion.button>
             ))}
           </div>
@@ -386,30 +378,24 @@ export default function Home() {
               geliştirmeye devam ediyorum.
           </motion.p>
             
-            {/* Modern Action Buttons */}
-          <motion.div 
-              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4 sm:px-6"
-            initial={{ opacity: 0, y: 30 }}
+            {/* Terminal Card */}
+            <motion.div 
+              className="mt-8 sm:mt-12 px-4 sm:px-6"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.8 }}
             >
-              <motion.button
-                onClick={() => scrollToSection('projects')}
-                className="btn-modern btn-modern-primary cursor-pointer glow-effect text-sm sm:text-base font-semibold px-6 sm:px-8 py-3 sm:py-4 touch-target"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Projelerimi Görün
-              </motion.button>
-              
-              <motion.button
-                onClick={() => scrollToSection('contact')}
-                className="btn-modern btn-modern-outline cursor-pointer text-sm sm:text-base font-semibold px-6 sm:px-8 py-3 sm:py-4 touch-target"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                İletişime Geçin
-              </motion.button>
+              <TerminalCard 
+                commands={[
+                  'echo "KAAN DOĞANAY"',
+                  'echo "FULL STACK DEVELOPER"',
+                  'whoami',
+                  'git config user.name "Kaan Doğanay"',
+                  'echo "Welcome to my Portfolio 🚀"',
+                  'npm whoami'
+                ]}
+                className="max-w-md mx-auto"
+              />
             </motion.div>
 
             {/* Floating Elements */}
@@ -596,7 +582,7 @@ export default function Home() {
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-6 mt-8">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-400 mb-2">3+</div>
+                    <div className="text-3xl font-bold text-blue-400 mb-2">1+</div>
                     <div className="text-slate-400 text-sm">Yıl Deneyim</div>
                   </div>
                   <div className="text-center">
@@ -672,52 +658,45 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-              <ShinyText text="Teknolojiler" speed={4} className="blue-theme" />
+              <ShinyText text="Yetenekler" speed={4} className="blue-theme" />
           </motion.h2>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 md:gap-8">
               {[
-                { name: "React", variant: "blue" },
-                { name: "Next.js", variant: "default" },
-                { name: "TypeScript", variant: "blue" },
+                { name: "React", variant: "green" },
+                { name: "Next.js", variant: "blue" },
+                { name: "TypeScript", variant: "cyan" },
                 { name: "JavaScript", variant: "yellow" },
-                { name: "Python", variant: "blue" },
+                { name: "Python", variant: "purple" },
                 { name: "Node.js", variant: "pink" },
-                { name: "MongoDB", variant: "pink" },
+                { name: "MongoDB", variant: "green" },
                 { name: "Firebase", variant: "yellow" },
-                { name: "TailwindCSS", variant: "blue" },
-                { name: "Express.js", variant: "default" },
+                { name: "TailwindCSS", variant: "cyan" },
+                { name: "Express.js", variant: "blue" },
                 { name: "Git", variant: "pink" },
-                { name: "AI/ML", variant: "yellow" }
+                { name: "AI/ML", variant: "purple" }
               ].map((skill, index) => (
-              <motion.div
+                <motion.div
                   key={skill.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                  whileHover={{
-                    y: -8,
-                    scale: 1.05,
-                    transition: { type: "spring", stiffness: 300 }
-                  }}
-                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
                 >
-                  <PixelCard 
-                    variant={skill.variant as 'blue' | 'yellow' | 'pink' | 'default'}
-                    className="h-20 sm:h-24 md:h-28 hover-effect touch-target cursor-pointer shadow-xl shadow-black/30 hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-300 border border-slate-700/30"
-                    disablePixels={true}
+                  <GradientCard 
+                    variant={skill.variant as 'green' | 'blue' | 'purple' | 'pink' | 'yellow' | 'cyan'}
+                    className="touch-target"
                   >
-                    <div className="w-full h-full flex items-center justify-center p-2">
+                    <div className="gradient-card-content">
                       <ShinyText 
                         text={skill.name} 
                         speed={3} 
                         className="text-xs sm:text-sm md:text-base font-bold text-white text-center" 
                       />
-                  </div>
-                </PixelCard>
-              </motion.div>
-            ))}
+                    </div>
+                  </GradientCard>
+                </motion.div>
+              ))}
           </div>
         </div>
         </section>
@@ -750,18 +729,12 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
                   viewport={{ once: true }}
-                  whileHover={{ y: -15, scale: 1.02 }}
-                  className="group"
                 >
-                  <PixelCard variant={project.variant as 'blue' | 'yellow' | 'pink' | 'default'} className="h-96 sm:h-[26rem] md:h-[28rem] hover-effect cursor-pointer shadow-2xl shadow-black/40 hover:shadow-4xl hover:shadow-purple-500/30 transition-all duration-500 border border-slate-700/30" disablePixels={true}>
+                  <PixelCard variant={project.variant as 'blue' | 'yellow' | 'pink' | 'default'} className="h-96 sm:h-[26rem] md:h-[28rem] cursor-pointer shadow-2xl shadow-black/40 border border-slate-700/30" disablePixels={true}>
                     <div className="w-full h-full p-6 sm:p-8 flex flex-col">
-                      <motion.div 
-                        className="h-40 sm:h-48 md:h-52 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-sm border border-slate-600/30 group-hover:border-slate-500/50 transition-all duration-300"
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
+                      <div className="h-40 sm:h-48 md:h-52 bg-gradient-to-br from-slate-700/20 to-slate-800/20 rounded-xl flex items-center justify-center mb-6 backdrop-blur-sm border border-slate-600/30">
                         <ShinyText text={`Proje ${project.id}`} speed={4} className="text-xl sm:text-2xl md:text-3xl font-bold" />
-                      </motion.div>
+                      </div>
                       <div className="flex-1 flex flex-col">
                         <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                   <ShinyText text={project.title} speed={3} className="blue-theme" />
@@ -771,34 +744,25 @@ export default function Home() {
                 </p>
                         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
                           {project.tech.map((tech, techIndex) => (
-                            <motion.span 
+                            <span 
                               key={tech} 
-                              className="px-3 sm:px-4 py-1.5 bg-slate-700/50 text-white rounded-lg text-xs sm:text-sm backdrop-blur-sm border border-slate-600/30 cursor-pointer"
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: (index * 0.2) + (techIndex * 0.1) + 0.5 }}
-                              viewport={{ once: true }}
-                              whileHover={{ scale: 1.1, backgroundColor: "rgba(71, 85, 105, 0.7)" }}
+                              className="px-3 sm:px-4 py-1.5 bg-slate-700/50 text-white rounded-lg text-xs sm:text-sm backdrop-blur-sm border border-slate-600/30"
                             >
                       {tech}
-                            </motion.span>
+                            </span>
                   ))}
                 </div>
                         <div className="flex gap-4 sm:gap-6">
-                          <motion.button 
-                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-blue-500/50"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
+                          <button 
+                            className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold cursor-pointer shadow-lg"
                           >
                             <ShinyText text="Demo" speed={2} className="dark-theme" />
-                          </motion.button>
-                          <motion.button 
-                            className="flex-1 border border-slate-600 text-slate-300 py-3 px-4 rounded-xl font-semibold hover:bg-slate-700/50 hover:border-slate-500 transition-all duration-300 cursor-pointer"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
+                          </button>
+                          <button 
+                            className="flex-1 border border-slate-600 text-slate-300 py-3 px-4 rounded-xl font-semibold cursor-pointer"
                           >
                     <ShinyText text="GitHub" speed={2} className="purple-theme" />
-                          </motion.button>
+                          </button>
                 </div>
               </div>
             </div>
