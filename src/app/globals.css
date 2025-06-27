@@ -2,19 +2,19 @@
 
 /* Root Variables */
 :root {
-  --background: #0a0a0a;
+  --background: #1d1d1d;
   --foreground: #ededed;
   --accent-1: #ff6b6b;
   --accent-2: #4ecdc4;
   --accent-3: #45b7d1;
   --accent-4: #96ceb4;
   --accent-5: #ffeaa7;
-  --bg-primary: #0a0b1e;
-  --bg-secondary: #151629;
-  --bg-accent: #1e1f3a;
+  --bg-primary: #1d1d1d;
+  --bg-secondary: #4e4f51;
+  --bg-accent: #3c3c3c;
   --text-primary: #ffffff;
-  --text-secondary: #b4b7c7;
-  --text-accent: #8b8fa8;
+  --text-secondary: #e2e8f0;
+  --text-accent: #cbd5e1;
   --accent-blue: #3b82f6;
   --accent-purple: #8b5cf6;
   --accent-pink: #ec4899;
@@ -26,6 +26,82 @@
   --glow-purple: rgba(139, 92, 246, 0.3);
   --glow-pink: rgba(236, 72, 153, 0.3);
   --glow-cyan: rgba(6, 182, 212, 0.3);
+  
+  /* Hexagonal Pattern Variables */
+  --hex-size: 200px;
+  --hex-color-1: #1d1d1d;
+  --hex-color-2: #4e4f51;
+  --hex-color-3: #3c3c3c;
+}
+
+/* Hexagonal Pattern Background */
+.hexagonal-background {
+  width: 100%;
+  height: 100%;
+  --s: var(--hex-size);
+  --c1: var(--hex-color-1);
+  --c2: var(--hex-color-2);
+  --c3: var(--hex-color-3);
+
+  background: repeating-conic-gradient(
+        from 30deg,
+        #0000 0 120deg,
+        var(--c3) 0 180deg
+      )
+      calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+    repeating-conic-gradient(
+      from 30deg,
+      var(--c1) 0 60deg,
+      var(--c2) 0 120deg,
+      var(--c3) 0 180deg
+    );
+  background-size: var(--s) calc(var(--s) * 0.577);
+}
+
+/* Enhanced body with hexagonal background */
+body {
+  font-family: var(--font-outfit), var(--font-poppins), 'Segoe UI', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  font-variant-ligatures: common-ligatures;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  
+  /* Apply hexagonal pattern */
+  --s: var(--hex-size);
+  --c1: var(--hex-color-1);
+  --c2: var(--hex-color-2);
+  --c3: var(--hex-color-3);
+
+  background: repeating-conic-gradient(
+        from 30deg,
+        #0000 0 120deg,
+        var(--c3) 0 180deg
+      )
+      calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+    repeating-conic-gradient(
+      from 30deg,
+      var(--c1) 0 60deg,
+      var(--c2) 0 120deg,
+      var(--c3) 0 180deg
+    );
+  background-size: var(--s) calc(var(--s) * 0.577);
+  background-attachment: fixed;
+}
+
+/* Responsive hexagonal pattern */
+@media (max-width: 768px) {
+  :root {
+    --hex-size: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --hex-size: 80px;
+  }
 }
 
 @theme inline {
@@ -783,17 +859,35 @@ body {
   ring-offset-color: #1e293b;
 }
 
-/* Modern Gradient Backgrounds */
+/* Modern Gradient Backgrounds with Hexagonal Pattern */
 .bg-modern-gradient {
-  background: linear-gradient(135deg, 
-    var(--bg-primary) 0%,
-    var(--bg-secondary) 25%,
-    var(--bg-accent) 50%,
-    var(--bg-secondary) 75%,
-    var(--bg-primary) 100%
-  );
-  background-size: 400% 400%;
-  animation: modern-gradient 15s ease infinite;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.bg-modern-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  --s: var(--hex-size);
+  --c1: var(--hex-color-1);
+  --c2: var(--hex-color-2);
+  --c3: var(--hex-color-3);
+
+  background: repeating-conic-gradient(
+        from 30deg,
+        #0000 0 120deg,
+        var(--c3) 0 180deg
+      )
+      calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+    repeating-conic-gradient(
+      from 30deg,
+      var(--c1) 0 60deg,
+      var(--c2) 0 120deg,
+      var(--c3) 0 180deg
+    );
+  background-size: var(--s) calc(var(--s) * 0.577);
+  z-index: -1;
 }
 
 @keyframes modern-gradient {
@@ -853,9 +947,9 @@ body {
 /* Modern Navbar Styles */
 .navbar-modern {
   backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(10, 11, 30, 0.8);
-  border: 1px solid rgba(139, 92, 246, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  background: rgba(29, 29, 29, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .nav-link-modern {
@@ -888,9 +982,9 @@ body {
 
 /* Modern Cards with Vibrant Effects */
 .card-modern {
-  background: rgba(21, 22, 41, 0.8);
+  background: rgba(60, 60, 60, 0.6);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;

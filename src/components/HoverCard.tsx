@@ -17,7 +17,7 @@ const HoverCard = memo(function HoverCard({
   borderGradient = false,
   hoverEffect = 'lift'
 }: HoverCardProps) {
-  const baseClasses = "relative rounded-2xl bg-black/40 backdrop-blur-sm border border-white/10 transition-all duration-300 gpu-accelerated cursor-pointer";
+  const baseClasses = "relative rounded-2xl bg-black/30 backdrop-blur-sm border border-white/20 transition-all duration-300 gpu-accelerated cursor-pointer";
 
   const hoverVariants = {
     lift: {

@@ -62,27 +62,15 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-modern-gradient">
-      {/* Modern Vibrant Background */}
-      <div className="fixed inset-0 z-0 overflow-hidden">
-        {/* Primary gradient base */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0b1e] via-[#151629] to-[#1e1f3a]"></div>
+    <div className="relative min-h-screen">
+      {/* Hexagonal Pattern Background with Enhancements */}
+      <div className="fixed inset-0 z-0 overflow-hidden hexagonal-background">
+        {/* Vibrant color overlays to enhance the hexagonal pattern */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/8 via-purple-600/4 to-pink-600/8"></div>
+        <div className="absolute inset-0 bg-gradient-to-bl from-cyan-600/4 via-transparent to-emerald-600/4"></div>
         
-        {/* Vibrant color overlays */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/10 via-purple-600/5 to-pink-600/10"></div>
-        <div className="absolute inset-0 bg-gradient-to-bl from-cyan-600/5 via-transparent to-emerald-600/5"></div>
-        
-        {/* Modern grid pattern with glow */}
-        <div 
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px'
-          }}
-        />
+        {/* Subtle glow overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.02] to-transparent"></div>
         
         {/* Animated floating orbs */}
         <motion.div 

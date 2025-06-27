@@ -284,32 +284,32 @@ export default function PixelCard({
   const onFocus = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
     if (!disablePixels) {
-      handleAnimation("appear");
+    handleAnimation("appear");
     }
   };
   
   const onBlur = (e: React.FocusEvent) => {
     if (e.currentTarget.contains(e.relatedTarget as Node)) return;
     if (!disablePixels) {
-      handleAnimation("disappear");
+    handleAnimation("disappear");
     }
   };
 
   useEffect(() => {
     if (!disablePixels) {
+    initPixels();
+    const observer = new ResizeObserver(() => {
       initPixels();
-      const observer = new ResizeObserver(() => {
-        initPixels();
-      });
-      if (containerRef.current) {
-        observer.observe(containerRef.current);
+    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+    return () => {
+      observer.disconnect();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
-      return () => {
-        observer.disconnect();
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current);
-        }
-      };
+    };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finalGap, finalSpeed, finalColors, finalNoFocus, disablePixels]);
@@ -326,10 +326,10 @@ export default function PixelCard({
       tabIndex={finalNoFocus ? -1 : 0}
     >
       {!disablePixels && (
-        <canvas
-          className="pixel-canvas"
-          ref={canvasRef}
-        />
+      <canvas
+        className="pixel-canvas"
+        ref={canvasRef}
+      />
       )}
       {children}
     </div>
