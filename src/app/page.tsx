@@ -743,7 +743,7 @@ export default function Home() {
                   Bu projede modern web teknolojileri kullanarak kullanıcı dostu ve performanslı bir uygulama geliştirdim.
                 </p>
                         <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
-                          {project.tech.map((tech, techIndex) => (
+                          {project.tech.map((tech) => (
                             <span 
                               key={tech} 
                               className="px-3 sm:px-4 py-1.5 bg-slate-700/50 text-white rounded-lg text-xs sm:text-sm backdrop-blur-sm border border-slate-600/30"
